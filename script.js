@@ -80,3 +80,115 @@ updateClocks();
 setInterval(() => {
     updateClocks();
 }, 1000);
+
+
+let alarms = {}; // To store alarm times for each clock
+
+function setAlarm(clockId) {
+    const alarmTime = prompt("Enter alarm time (HH:MM) for " + clockId + ":");
+    if (alarmTime) {
+        alarms[clockId] = { time: alarmTime, triggered: false };
+        alert("Alarm set for " + alarmTime);
+    }
+}
+
+function checkAlarms() {
+    const now = new Date();
+    const hours = now.getHours().toString().padStart(2, '0');
+    const minutes = now.getMinutes().toString().padStart(2, '0');
+    const currentTime = `${hours}:${minutes}`;
+
+    for (const [clockId, alarm] of Object.entries(alarms)) {
+        if (currentTime === alarm.time) {
+            if (!alarm.triggered) {
+                const clockElement = document.getElementById(clockId);
+                clockElement.classList.add('alarm-triggered');
+                alarm.triggered = true; // Mark the alarm as triggered
+                setTimeout(() => {
+                    clockElement.classList.remove('alarm-triggered'); // Remove the animation class after 10 seconds
+                    alarm.triggered = false; // Reset the alarm
+                }, 10000); // Pulsation effect duration
+            }
+        }
+    }
+}
+
+// Add event listeners to clocks
+document.querySelectorAll('.clock').forEach(clock => {
+    clock.addEventListener('click', () => setAlarm(clock.id));
+});
+
+// Check alarms every second for more responsive checking
+setInterval(checkAlarms, 1000);
+
+// JavaScript for Drag-and-Drop
+document.addEventListener('DOMContentLoaded', () => {
+    const clocks = document.querySelectorAll('.clock');
+    let draggedClock = null;
+
+    clocks.forEach(clock => {
+        clock.addEventListener('dragstart', (event) => {
+            draggedClock = event.target;
+            event.target.style.opacity = 0.5; // Visual feedback
+        });
+
+        clock.addEventListener('dragend', (event) => {
+            event.target.style.opacity = 1; // Reset visual feedback
+        });
+
+        clock.addEventListener('dragover', (event) => {
+            event.preventDefault(); // Allow dropping
+            if (event.target.classList.contains('clock')) {
+                event.target.classList.add('drag-over');
+            }
+        });
+
+        clock.addEventListener('dragleave', (event) => {
+            if (event.target.classList.contains('drag-over')) {
+                event.target.classList.remove('drag-over');
+            }
+        });
+
+        clock.addEventListener('drop', (event) => {
+            event.preventDefault();
+            if (event.target.classList.contains('clock') && event.target !== draggedClock) {
+                event.target.classList.remove('drag-over');
+                const container = document.getElementById('clock-container');
+                const draggedIndex = Array.from(container.children).indexOf(draggedClock);
+                const targetIndex = Array.from(container.children).indexOf(event.target);
+                
+                if (draggedIndex < targetIndex) {
+                    container.insertBefore(draggedClock, event.target.nextSibling);
+                } else {
+                    container.insertBefore(draggedClock, event.target);
+                }
+            }
+        });
+    });
+});
+
+function saveClockOrder() {
+    const clockIds = Array.from(document.querySelectorAll('.clock')).map(clock => clock.id);
+    localStorage.setItem('clockOrder', JSON.stringify(clockIds));
+}
+
+function loadClockOrder() {
+    const savedOrder = JSON.parse(localStorage.getItem('clockOrder'));
+    if (savedOrder) {
+        const container = document.getElementById('clock-container');
+        savedOrder.forEach(id => {
+            const clock = document.getElementById(id);
+            container.appendChild(clock);
+        });
+    }
+}
+
+// Call loadClockOrder when the page loads
+document.addEventListener('DOMContentLoaded', () => {
+    loadClockOrder();
+    // Add saveClockOrder call to dragend event
+    document.querySelectorAll('.clock').forEach(clock => {
+        clock.addEventListener('dragend', saveClockOrder);
+    });
+});
+

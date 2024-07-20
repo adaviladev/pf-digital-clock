@@ -29,6 +29,7 @@ body {
     position: relative;
     width: 200px; /* Fixed width for consistency */
     padding: 20px;
+    padding-bottom: 5px;
     border-radius: 10px;
     text-align: center;
     color: white; /* Text color */
@@ -37,7 +38,14 @@ body {
     box-shadow: -1px 6px 13px 0px rgba(0,0,0,0.75);
     -webkit-box-shadow: -1px 6px 13px 0px rgba(0,0,0,0.75);
     -moz-box-shadow: -1px 6px 13px 0px rgba(0,0,0,0.75);
+    transition: background 0.3s ease, box-shadow 0.3s ease; /* Smooth transition for hover effects */
 }
+
+.clock:hover {
+    box-shadow: 0 0 20px rgba(76, 73, 73, 0.6); /* Highlight effect on hover */
+    background: linear-gradient(18deg, rgba(255, 255, 255, 0.5) 0%, rgba(0, 0, 0, 0.8) 100%); /* Slightly lighter gradient on hover */
+}
+
 
 .city-name {
 
@@ -47,7 +55,7 @@ body {
     background: rgba(0, 0, 0, 0.7); /* Slightly different background for better visibility */
     padding: 5px;
     border-radius: 5px;
-    color: white; /* Ensure text color is visible */
+    color: rgb(171, 156, 156); /* Ensure text color is visible */
     z-index: 1; /* Ensure city name is on top */
 }
 
@@ -58,4 +66,50 @@ body {
     color: rgb(18, 17, 17); /* Ensure text color is visible */
     /* 3D effect */
     text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5); /* Optional: add a shadow for better 3D effect */
+}
+
+.set-alarm {
+    margin-top: 10px;
+    margin-bottom: 2px;
+    border: none;
+    background-color:transparent; /* Adjust color as needed */
+    color: rgb(23, 9, 9);
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: .8rem;
+    font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+
+}
+
+.set-alarm:hover {
+    border: 2px solid rgb(8, 8, 8); /* Darker color on hover */
+}
+
+@keyframes pulse {
+    0% {
+        background-color: rgb(255, 0, 0); /* Start with red color */
+    }
+    50% {
+        background-color: rgb(255, 247, 0); /* Transition to green color */
+    }
+    100% {
+        background-color: rgb(0, 0, 255); /* End with blue color */
+    }
+}
+
+.alarm-triggered {
+    animation: pulse 0.2s infinite; /* Pulsation effect every second */
+}
+
+.clock {
+    /* Existing styles */
+    cursor: grab; /* Indicate that the element is draggable */
+}
+
+.clock:active {
+    cursor: grabbing; /* Change cursor when dragging */
+}
+
+.drag-over {
+    border: 2px dashed #ff77aa; /* Visual indicator when dragging over */
 }
