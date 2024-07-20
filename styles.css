@@ -12,11 +12,11 @@
     --color-dusk: #666666;      /* Gris medio para el anochecer */
     --color-night: #1a1a1a;     /* Gris muy oscuro para la noche */
 
-    --text-color-midnight: #cccccc;  /* Gris claro para la medianoche */
-    --text-color-dawn: #b3b3b3;      /* Gris un poco más oscuro para el amanecer */
-    --text-color-noon: #666666;      /* Gris medio para el mediodía */
-    --text-color-dusk: #b3b3b3;      /* Gris un poco más oscuro para el anochecer */
-    --text-color-night: #cccccc;     /* Gris claro para la noche */
+    --text-color-midnight: #635959;  /* Gris claro para la medianoche */
+    --text-color-dawn: #c8c8c8;      /* Gris un poco más oscuro para el amanecer */
+    --text-color-noon: #ffffff;      /* Gris medio para el mediodía */
+    --text-color-dusk: #f8f8f8;      /* Gris un poco más oscuro para el anochecer */
+    --text-color-night: #404040;     /* Gris claro para la noche */
 }
 
 body {
