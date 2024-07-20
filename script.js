@@ -1,47 +1,4 @@
-function updateBackgroundColor(clock, timeZone) {
-    const now = timeZone ? new Date(new Date().toLocaleString("en-US", { timeZone })) : new Date();
-    const hours = now.getHours();
-    const minutes = now.getMinutes();
-    const seconds = now.getSeconds();
-    const totalSeconds = hours * 3600 + minutes * 60 + seconds;
-    const totalDaySeconds = 24 * 3600;
-    const progress = totalSeconds / totalDaySeconds;
-
-    // Define cyberpunk gradient colors for different times of the day
-    const gradients = [
-        { time: 0, color: '#2a1f4b' },   // Midnight - Deep Blue
-        { time: 6, color: '#e63946' },   // 6 AM - Neon Pink
-        { time: 12, color: '#f1faee' },  // Noon - Light Cyan
-        { time: 18, color: '#ff77aa' },  // 6 PM - Electric Purple
-        { time: 21, color: '#4e4c59' },  // 9 PM - Dark Purple
-        { time: 24, color: '#2a1f4b' }   // Midnight - Deep Blue
-    ];
-
-    // Find the two gradient stops surrounding the current time
-    let startGradient, endGradient;
-    for (let i = 0; i < gradients.length - 1; i++) {
-        if (progress >= gradients[i].time / 24 && progress < gradients[i + 1].time / 24) {
-            startGradient = gradients[i];
-            endGradient = gradients[i + 1];
-            break;
-        }
-    }
-
-    // Calculate the color based on the time progress between the two stops
-    const timeBetween = (progress - startGradient.time / 24) / ((endGradient.time - startGradient.time) / 24);
-    const startColor = hexToRgb(startGradient.color);
-    const endColor = hexToRgb(endGradient.color);
-    const currentColor = {
-        r: Math.round(startColor.r + timeBetween * (endColor.r - startColor.r)),
-        g: Math.round(startColor.g + timeBetween * (endColor.g - startColor.g)),
-        b: Math.round(startColor.b + timeBetween * (endColor.b - startColor.b))
-    };
-
-    // Apply gradient background
-    const gradientColor = `rgb(${currentColor.r}, ${currentColor.g}, ${currentColor.b})`;
-    clock.style.background = `linear-gradient(18deg, ${gradientColor} 0%, rgba(0,0,0,0.8) 100%)`;
-}
-
+// Función para convertir hex a RGB
 function hexToRgb(hex) {
     const bigint = parseInt(hex.slice(1), 16);
     const r = (bigint >> 16) & 255;
@@ -50,9 +7,60 @@ function hexToRgb(hex) {
     return { r, g, b };
 }
 
+// Actualiza el fondo y el color del texto según el tiempo
+function updateBackgroundColorAndTextColor(clock, timeZone) {
+    const now = timeZone ? new Date(new Date().toLocaleString("en-US", { timeZone })) : new Date();
+    const hours = now.getHours();
+    const styles = getComputedStyle(document.documentElement);
+
+    // Define gradientes para diferentes momentos del día
+    const gradients = [
+        { time: 0, color: styles.getPropertyValue('--color-midnight').trim(), textColor: styles.getPropertyValue('--text-color-midnight').trim() },
+        { time: 6, color: styles.getPropertyValue('--color-dawn').trim(), textColor: styles.getPropertyValue('--text-color-dawn').trim() },
+        { time: 12, color: styles.getPropertyValue('--color-noon').trim(), textColor: styles.getPropertyValue('--text-color-noon').trim() },
+        { time: 18, color: styles.getPropertyValue('--color-dusk').trim(), textColor: styles.getPropertyValue('--text-color-dusk').trim() },
+        { time: 24, color: styles.getPropertyValue('--color-midnight').trim(), textColor: styles.getPropertyValue('--text-color-midnight').trim() }
+    ];
+
+    // Encuentra los gradientes que rodean el tiempo actual
+    let startGradient, endGradient;
+    for (let i = 0; i < gradients.length - 1; i++) {
+        if (hours >= gradients[i].time && hours < gradients[i + 1].time) {
+            startGradient = gradients[i];
+            endGradient = gradients[i + 1];
+            break;
+        }
+    }
+
+    // Calcula el color basado en el progreso entre los dos gradientes
+    const timeBetween = (hours - startGradient.time) / (endGradient.time - startGradient.time);
+    const startColor = hexToRgb(startGradient.color);
+    const endColor = hexToRgb(endGradient.color);
+    const currentColor = {
+        r: Math.round(startColor.r + timeBetween * (endColor.r - startColor.r)),
+        g: Math.round(startColor.g + timeBetween * (endColor.g - startColor.g)),
+        b: Math.round(startColor.b + timeBetween * (endColor.b - startColor.b))
+    };
+
+    const startTextColor = hexToRgb(startGradient.textColor);
+    const endTextColor = hexToRgb(endGradient.textColor);
+    const currentTextColor = {
+        r: Math.round(startTextColor.r + timeBetween * (endTextColor.r - startTextColor.r)),
+        g: Math.round(startTextColor.g + timeBetween * (endTextColor.g - startTextColor.g)),
+        b: Math.round(startTextColor.b + timeBetween * (endTextColor.b - startTextColor.b))
+    };
+
+    // Aplica el color de fondo y el color del texto
+    const gradientColor = `rgb(${currentColor.r}, ${currentColor.g}, ${currentColor.b})`;
+    const textColor = `rgb(${currentTextColor.r}, ${currentTextColor.g}, ${currentTextColor.b})`;
+    clock.style.background = `linear-gradient(0deg, ${gradientColor} 0%, rgba(0,0,0,0.8) 100%)`;
+    clock.querySelector('.time').style.color = textColor;
+}
+
+// Actualiza la hora y el color para cada reloj
 function updateClocks() {
     const timeZones = {
-        'clock-local': null, // Local time
+        'clock-local': null, // Hora local
         'clock-ny': 'America/New_York',
         'clock-london': 'Europe/London',
         'clock-tokyo': 'Asia/Tokyo',
@@ -61,83 +69,49 @@ function updateClocks() {
     };
 
     const now = new Date();
+
+    // Actualiza la hora para cada reloj
     for (const [id, timeZone] of Object.entries(timeZones)) {
         const cityTime = timeZone ? new Date(now.toLocaleString("en-US", { timeZone })) : now;
         const hours = cityTime.getHours().toString().padStart(2, '0');
         const minutes = cityTime.getMinutes().toString().padStart(2, '0');
         const seconds = cityTime.getSeconds().toString().padStart(2, '0');
-        const timeElement = document.querySelector(`#${id} .time`);
         const clock = document.getElementById(id);
-        timeElement.textContent = `${hours}:${minutes}:${seconds}`;
-        updateBackgroundColor(clock, timeZone);
-    }
-}
-
-// Initial call to set the background color and clocks immediately
-updateClocks();
-
-// Update every second
-setInterval(() => {
-    updateClocks();
-}, 1000);
-
-
-let alarms = {}; // To store alarm times for each clock
-
-function setAlarm(clockId) {
-    const alarmTime = prompt("Enter alarm time (HH:MM) for " + clockId + ":");
-    if (alarmTime) {
-        alarms[clockId] = { time: alarmTime, triggered: false };
-        alert("Alarm set for " + alarmTime);
-    }
-}
-
-function checkAlarms() {
-    const now = new Date();
-    const hours = now.getHours().toString().padStart(2, '0');
-    const minutes = now.getMinutes().toString().padStart(2, '0');
-    const currentTime = `${hours}:${minutes}`;
-
-    for (const [clockId, alarm] of Object.entries(alarms)) {
-        if (currentTime === alarm.time) {
-            if (!alarm.triggered) {
-                const clockElement = document.getElementById(clockId);
-                clockElement.classList.add('alarm-triggered');
-                alarm.triggered = true; // Mark the alarm as triggered
-                setTimeout(() => {
-                    clockElement.classList.remove('alarm-triggered'); // Remove the animation class after 10 seconds
-                    alarm.triggered = false; // Reset the alarm
-                }, 10000); // Pulsation effect duration
+        if (clock) {
+            const timeElement = clock.querySelector('.time');
+            if (timeElement) {
+                timeElement.textContent = `${hours}:${minutes}:${seconds}`;
+                updateBackgroundColorAndTextColor(clock, timeZone);
             }
         }
     }
 }
 
-// Add event listeners to clocks
-document.querySelectorAll('.clock').forEach(clock => {
-    clock.addEventListener('click', () => setAlarm(clock.id));
-});
+// Llama a la función `updateClocks` inmediatamente y cada segundo
+updateClocks();
+setInterval(updateClocks, 1000);
 
-// Check alarms every second for more responsive checking
-setInterval(checkAlarms, 1000);
-
-// JavaScript for Drag-and-Drop
+// Añade los event listeners para las alarmas y el drag-and-drop
 document.addEventListener('DOMContentLoaded', () => {
     const clocks = document.querySelectorAll('.clock');
     let draggedClock = null;
 
     clocks.forEach(clock => {
+        clock.addEventListener('click', () => setAlarm(clock.id));
+
+        // Drag-and-drop
         clock.addEventListener('dragstart', (event) => {
             draggedClock = event.target;
-            event.target.style.opacity = 0.5; // Visual feedback
+            event.target.style.opacity = 0.5;
         });
 
         clock.addEventListener('dragend', (event) => {
-            event.target.style.opacity = 1; // Reset visual feedback
+            event.target.style.opacity = 1;
+            saveClockOrder(); // Guarda el orden después del drag-and-drop
         });
 
         clock.addEventListener('dragover', (event) => {
-            event.preventDefault(); // Allow dropping
+            event.preventDefault();
             if (event.target.classList.contains('clock')) {
                 event.target.classList.add('drag-over');
             }
@@ -156,7 +130,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const container = document.getElementById('clock-container');
                 const draggedIndex = Array.from(container.children).indexOf(draggedClock);
                 const targetIndex = Array.from(container.children).indexOf(event.target);
-                
+
                 if (draggedIndex < targetIndex) {
                     container.insertBefore(draggedClock, event.target.nextSibling);
                 } else {
@@ -165,30 +139,27 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     });
+
+    loadClockOrder(); // Carga el orden de los relojes al inicio
 });
 
+// Guarda el orden de los relojes en el localStorage
 function saveClockOrder() {
-    const clockIds = Array.from(document.querySelectorAll('.clock')).map(clock => clock.id);
-    localStorage.setItem('clockOrder', JSON.stringify(clockIds));
+    const container = document.getElementById('clock-container');
+    const order = Array.from(container.children).map(clock => clock.id);
+    localStorage.setItem('clockOrder', JSON.stringify(order));
 }
 
+// Carga el orden de los relojes desde el localStorage
 function loadClockOrder() {
-    const savedOrder = JSON.parse(localStorage.getItem('clockOrder'));
-    if (savedOrder) {
+    const order = JSON.parse(localStorage.getItem('clockOrder'));
+    if (order) {
         const container = document.getElementById('clock-container');
-        savedOrder.forEach(id => {
+        order.forEach(id => {
             const clock = document.getElementById(id);
-            container.appendChild(clock);
+            if (clock) {
+                container.appendChild(clock);
+            }
         });
     }
 }
-
-// Call loadClockOrder when the page loads
-document.addEventListener('DOMContentLoaded', () => {
-    loadClockOrder();
-    // Add saveClockOrder call to dragend event
-    document.querySelectorAll('.clock').forEach(clock => {
-        clock.addEventListener('dragend', saveClockOrder);
-    });
-});
-

@@ -5,6 +5,20 @@
     font-style: normal;
 }
 
+:root {
+    --color-midnight: #1a1a1a;  /* Gris muy oscuro para la medianoche */
+    --color-dawn: #666666;      /* Gris medio para el amanecer */
+    --color-noon: #cccccc;      /* Gris claro para el mediodía */
+    --color-dusk: #666666;      /* Gris medio para el anochecer */
+    --color-night: #1a1a1a;     /* Gris muy oscuro para la noche */
+
+    --text-color-midnight: #cccccc;  /* Gris claro para la medianoche */
+    --text-color-dawn: #b3b3b3;      /* Gris un poco más oscuro para el amanecer */
+    --text-color-noon: #666666;      /* Gris medio para el mediodía */
+    --text-color-dusk: #b3b3b3;      /* Gris un poco más oscuro para el anochecer */
+    --text-color-night: #cccccc;     /* Gris claro para la noche */
+}
+
 body {
     display: flex;
     justify-content: center;
@@ -23,13 +37,14 @@ body {
     align-items: center;
     align-content: center;
     font-variant-ligatures: none;
+    padding-bottom: 5%;
 }
 
 .clock {
     position: relative;
     width: 200px; /* Fixed width for consistency */
     padding: 20px;
-    padding-bottom: 5px;
+    padding-bottom: 15px;
     border-radius: 10px;
     text-align: center;
     color: white; /* Text color */
@@ -39,6 +54,7 @@ body {
     -webkit-box-shadow: -1px 6px 13px 0px rgba(0,0,0,0.75);
     -moz-box-shadow: -1px 6px 13px 0px rgba(0,0,0,0.75);
     transition: background 0.3s ease, box-shadow 0.3s ease; /* Smooth transition for hover effects */
+    cursor: grab; /* Indicate that the element is draggable */
 }
 
 .clock:hover {
@@ -46,16 +62,22 @@ body {
     background: linear-gradient(18deg, rgba(255, 255, 255, 0.5) 0%, rgba(0, 0, 0, 0.8) 100%); /* Slightly lighter gradient on hover */
 }
 
+.clock:active {
+    cursor: grabbing; /* Change cursor when dragging */
+}
+
+.drag-over {
+    border: 2px dashed #ff77aa; /* Visual indicator when dragging over */
+}
 
 .city-name {
-
     top: 10px; /* Adjust as needed */
     transform: translateX(-20%);
     font-size: 1.2rem; /* Font size for the city name */
     background: rgba(0, 0, 0, 0.7); /* Slightly different background for better visibility */
     padding: 2px;
     border-radius: 5px;
-    color: rgb(171, 156, 156); /* Ensure text color is visible */
+    color: hsl(0, 69%, 70%); /* Ensure text color is visible */
     z-index: 1; /* Ensure city name is on top */
 }
 
@@ -66,50 +88,4 @@ body {
     color: rgb(18, 17, 17); /* Ensure text color is visible */
     /* 3D effect */
     text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5); /* Optional: add a shadow for better 3D effect */
-}
-
-.set-alarm {
-    margin-top: 10px;
-    margin-bottom: 2px;
-    border: none;
-    background-color:transparent; /* Adjust color as needed */
-    color: rgb(23, 9, 9);
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: .8rem;
-    font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
-
-}
-
-.set-alarm:hover {
-    border: 2px solid rgb(8, 8, 8); /* Darker color on hover */
-}
-
-@keyframes pulse {
-    0% {
-        background-color: rgb(255, 0, 0); /* Start with red color */
-    }
-    50% {
-        background-color: rgb(255, 247, 0); /* Transition to green color */
-    }
-    100% {
-        background-color: rgb(0, 0, 255); /* End with blue color */
-    }
-}
-
-.alarm-triggered {
-    animation: pulse 0.2s infinite; /* Pulsation effect every second */
-}
-
-.clock {
-    /* Existing styles */
-    cursor: grab; /* Indicate that the element is draggable */
-}
-
-.clock:active {
-    cursor: grabbing; /* Change cursor when dragging */
-}
-
-.drag-over {
-    border: 2px dashed #ff77aa; /* Visual indicator when dragging over */
 }
