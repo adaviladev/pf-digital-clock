@@ -39,7 +39,7 @@ function updateBackgroundColor(clock, timeZone) {
 
     // Apply gradient background
     const gradientColor = `rgb(${currentColor.r}, ${currentColor.g}, ${currentColor.b})`;
-    clock.style.background = `linear-gradient(180deg, ${gradientColor} 0%, rgba(0,0,0,0.8) 100%)`;
+    clock.style.background = `linear-gradient(18deg, ${gradientColor} 0%, rgba(0,0,0,0.8) 100%)`;
 }
 
 function hexToRgb(hex) {

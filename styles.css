@@ -9,7 +9,7 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    background: rgb(26, 32, 46);
+    background: rgb(38, 38, 39);
 }
 
 #clock-container {
@@ -40,10 +40,9 @@ body {
 }
 
 .city-name {
-    position: absolute;
+
     top: 10px; /* Adjust as needed */
-    left: 50%;
-    transform: translateX(-50%);
+    transform: translateX(-20%);
     font-size: 1.2rem; /* Font size for the city name */
     background: rgba(0, 0, 0, 0.7); /* Slightly different background for better visibility */
     padding: 5px;
@@ -54,9 +53,9 @@ body {
 
 .time {
     position: relative;
-    margin-top: 50px; /* Space below the city name */
-    font-size: 3rem; /* Font size for the time */
-    color: white; /* Ensure text color is visible */
+    margin-top: 10px; /* Space below the city name */
+    font-size: 2.8rem; /* Font size for the time */
+    color: rgb(18, 17, 17); /* Ensure text color is visible */
     /* 3D effect */
     text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5); /* Optional: add a shadow for better 3D effect */
 }
