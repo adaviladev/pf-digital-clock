@@ -53,7 +53,7 @@ body {
     transform: translateX(-20%);
     font-size: 1.2rem; /* Font size for the city name */
     background: rgba(0, 0, 0, 0.7); /* Slightly different background for better visibility */
-    padding: 5px;
+    padding: 2px;
     border-radius: 5px;
     color: rgb(171, 156, 156); /* Ensure text color is visible */
     z-index: 1; /* Ensure city name is on top */
