@@ -1,0 +1,59 @@
+@font-face {
+    font-family: 'Orloj';
+    src: url('/fonts/Orloj-Ea9eW.otf') format('opentype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(to right, #ff7e5f, #feb47b);
+}
+
+#clock-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+    font-variant-ligatures: none;
+    margin-top: 15%;
+}
+
+.clock {
+    position: relative;
+    width: 200px; /* Fixed width for consistency */
+    background: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+    color: white; /* Text color */
+    overflow: hidden; /* Ensure child elements don't overflow */
+    font-family: 'Orloj', sans-serif;
+}
+
+.city-name {
+    position: absolute;
+    top: 10px; /* Adjust as needed */
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 1.2rem; /* Font size for the city name */
+    background: rgba(0, 0, 0, 0.7); /* Slightly different background for better visibility */
+    padding: 5px;
+    border-radius: 5px;
+    color: white; /* Ensure text color is visible */
+    z-index: 1; /* Ensure city name is on top */
+}
+
+.time {
+    position: relative;
+    margin-top: 50px; /* Space below the city name */
+    font-size: 3rem; /* Font size for the time */
+    color: white; /* Ensure text color is visible */
+ /* 3D effect */
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5); /* Optional: add a shadow for better 3D effect */
+}
