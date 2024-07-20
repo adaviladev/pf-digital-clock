@@ -1,5 +1,5 @@
-function updateBackgroundColor() {
-    const now = new Date();
+function updateBackgroundColor(clock, timeZone) {
+    const now = timeZone ? new Date(new Date().toLocaleString("en-US", { timeZone })) : new Date();
     const hours = now.getHours();
     const minutes = now.getMinutes();
     const seconds = now.getSeconds();
@@ -7,14 +7,14 @@ function updateBackgroundColor() {
     const totalDaySeconds = 24 * 3600;
     const progress = totalSeconds / totalDaySeconds;
 
-    // Define gradient colors for different times of the day
+    // Define cyberpunk gradient colors for different times of the day
     const gradients = [
-        { time: 0, color: '#2c3e50' },   // Midnight
-        { time: 6, color: '#ff7e5f' },   // 6 AM
-        { time: 12, color: '#feb47b' },  // Noon
-        { time: 18, color: '#ff9a9e' },  // 6 PM
-        { time: 21, color: '#a18cd1' },  // 9 PM
-        { time: 24, color: '#2c3e50' }   // Midnight
+        { time: 0, color: '#2a1f4b' },   // Midnight - Deep Blue
+        { time: 6, color: '#e63946' },   // 6 AM - Neon Pink
+        { time: 12, color: '#f1faee' },  // Noon - Light Cyan
+        { time: 18, color: '#ff77aa' },  // 6 PM - Electric Purple
+        { time: 21, color: '#4e4c59' },  // 9 PM - Dark Purple
+        { time: 24, color: '#2a1f4b' }   // Midnight - Deep Blue
     ];
 
     // Find the two gradient stops surrounding the current time
@@ -37,7 +37,9 @@ function updateBackgroundColor() {
         b: Math.round(startColor.b + timeBetween * (endColor.b - startColor.b))
     };
 
-    document.body.style.background = `rgb(${currentColor.r}, ${currentColor.g}, ${currentColor.b})`;
+    // Apply gradient background
+    const gradientColor = `rgb(${currentColor.r}, ${currentColor.g}, ${currentColor.b})`;
+    clock.style.background = `linear-gradient(180deg, ${gradientColor} 0%, rgba(0,0,0,0.8) 100%)`;
 }
 
 function hexToRgb(hex) {
@@ -65,16 +67,16 @@ function updateClocks() {
         const minutes = cityTime.getMinutes().toString().padStart(2, '0');
         const seconds = cityTime.getSeconds().toString().padStart(2, '0');
         const timeElement = document.querySelector(`#${id} .time`);
+        const clock = document.getElementById(id);
         timeElement.textContent = `${hours}:${minutes}:${seconds}`;
+        updateBackgroundColor(clock, timeZone);
     }
 }
 
 // Initial call to set the background color and clocks immediately
-updateBackgroundColor();
 updateClocks();
 
 // Update every second
 setInterval(() => {
-    updateBackgroundColor();
     updateClocks();
 }, 1000);

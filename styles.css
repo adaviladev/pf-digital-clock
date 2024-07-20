@@ -5,12 +5,11 @@
     font-style: normal;
 }
 
-
 body {
     display: flex;
     justify-content: center;
     align-items: center;
-    background: linear-gradient(to right, #ff7e5f, #feb47b);
+    background: rgb(26, 32, 46);
 }
 
 #clock-container {
@@ -29,7 +28,6 @@ body {
 .clock {
     position: relative;
     width: 200px; /* Fixed width for consistency */
-    background: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
     padding: 20px;
     border-radius: 10px;
     text-align: center;
@@ -37,8 +35,8 @@ body {
     overflow: hidden; /* Ensure child elements don't overflow */
     font-family: 'Orloj', sans-serif;
     box-shadow: -1px 6px 13px 0px rgba(0,0,0,0.75);
--webkit-box-shadow: -1px 6px 13px 0px rgba(0,0,0,0.75);
--moz-box-shadow: -1px 6px 13px 0px rgba(0,0,0,0.75);
+    -webkit-box-shadow: -1px 6px 13px 0px rgba(0,0,0,0.75);
+    -moz-box-shadow: -1px 6px 13px 0px rgba(0,0,0,0.75);
 }
 
 .city-name {
@@ -59,6 +57,6 @@ body {
     margin-top: 50px; /* Space below the city name */
     font-size: 3rem; /* Font size for the time */
     color: white; /* Ensure text color is visible */
- /* 3D effect */
+    /* 3D effect */
     text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5); /* Optional: add a shadow for better 3D effect */
 }
